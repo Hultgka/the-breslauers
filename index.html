@@ -902,19 +902,22 @@ document.getElementById('footer-contact-form').onsubmit = function(e){
       }
     };
   });
-// Make all admin functions global for HTML onclick
-window.addNews = addNews;
-window.editNews = editNews;
-window.deleteNews = deleteNews;
-window.addShow = addShow;
-window.editShow = editShow;
-window.deleteShow = deleteShow;
-window.addVideo = addVideo;
-window.editVideo = editVideo;
-window.deleteVideo = deleteVideo;
-window.addMerch = addMerch;
-window.editMerch = editMerch;
-window.deleteMerch = deleteMerch;
+window.addNews = () => openEditModal("news", null, {});
+window.editNews = (id) => { let n = state.news.find(x => x._id === id); openEditModal("news", id, n); };
+window.deleteNews = async (id) => { if (!confirm("Are you sure?")) return; await deleteDoc(doc(db, "news", id)); await loadAllSections(); alert("News deleted!"); };
+
+window.addShow = () => openEditModal("shows", null, {});
+window.editShow = (id) => { let s = state.shows.find(x => x._id === id); openEditModal("shows", id, s); };
+window.deleteShow = async (id) => { if (!confirm("Are you sure?")) return; await deleteDoc(doc(db, "shows", id)); await loadAllSections(); alert("Show deleted!"); };
+
+window.addVideo = () => openEditModal("videos", null, {});
+window.editVideo = (id) => { let v = state.videos.find(x => x._id === id); openEditModal("videos", id, v); };
+window.deleteVideo = async (id) => { if (!confirm("Are you sure?")) return; await deleteDoc(doc(db, "videos", id)); await loadAllSections(); alert("Video deleted!"); };
+
+window.addMerch = () => openEditModal("merch", null, {});
+window.editMerch = (id) => { let m = state.merch.find(x => x._id === id); openEditModal("merch", id, m); };
+window.deleteMerch = async (id) => { if (!confirm("Are you sure?")) return; await deleteDoc(doc(db, "merch", id)); await loadAllSections(); alert("Merch deleted!"); };
+
 window.selectAdminTab = selectAdminTab;
 </script>
 </body>
