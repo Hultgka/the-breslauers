@@ -820,7 +820,15 @@ function openEditModal(section, id, val) {
     document.getElementById('edit-shows-form').onsubmit = async function(e) {
       e.preventDefault();
       const fd = new FormData(this);
-      const obj = { title:fd.get("title"),date:fd.get("date"),venue:fd.get("venue"),city:fd.get("city"),tix:fd.get("tix"),details:fd.get("details") };
+      const obj = { 
+  title: fd.get("title"),
+  date: fd.get("date"),
+  venue: fd.get("venue"),
+  city: fd.get("city"),
+  tix: fd.get("tix"),
+  details: fd.get("details"),
+  sortOrder: (typeof val.sortOrder === "number") ? val.sortOrder : state.shows.length
+};
       if (id) await updateDoc(doc(db,"shows",id),obj);
       else await addDoc(collection(db,"shows"),obj);
       document.getElementById('edit-modal').classList.remove('show');
