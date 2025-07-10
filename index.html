@@ -529,11 +529,11 @@ let s = showsArr[0];
 if (s) {
   showsGrid.innerHTML = `
     <div class="show-col show-date">
-      <div class="show-label">${s.date||""}</div>
+      <div class="show-label">${s.date || ""}</div>
     </div>
     <div class="show-col show-venue">
-      <div class="show-label">${s.venue||""}</div>
-      <div class="show-label show-city">${s.city||""}</div>
+      <div class="show-label">${s.venue || ""}</div>
+      <div class="show-label show-city">${s.city || ""}</div>
     </div>
     <div class="show-col show-ticket">
       <button class="show-ticketbtn">${s.tix ? s.tix : "FREE"}</button>
@@ -541,7 +541,7 @@ if (s) {
         <button class="news-admin-btn" onclick="editShow('${s._id}')">Edit</button>
         <button class="news-admin-btn" onclick="deleteShow('${s._id}')">Delete</button>
         <button class="news-admin-btn" onclick="addShow()">+ Add Show</button>
-      </div>`:""}
+      </div>` : ""}
     </div>
   `;
   document.getElementById('next-show-details').textContent = s.details || "";
@@ -556,21 +556,8 @@ if (s) {
   }
   document.getElementById('next-show-details').textContent = "";
 }
-} else {
-  // No shows; show "add" button for admin or a message for public
-  if (adminLoggedIn) {
-    showsGrid.innerHTML = `<div style="width:100%;margin-top:2em;text-align:right;">
-      <button class="news-admin-btn" onclick="addShow()">+ Add Show</button>
-    </div>`;
-  } else {
-    showsGrid.innerHTML = `<div style="color:#fff;">No upcoming shows. Check back soon!</div>`;
-  }
-  document.getElementById('next-show-details').textContent = "";
-}
 
   // VIDEOS
-
- // VIDEOS
 let videosList = document.getElementById('videos-list');
 videosList.innerHTML = '';
 let vids = state.videos;
@@ -916,7 +903,6 @@ document.getElementById('footer-contact-form').onsubmit = function(e){
     };
   });
 // Make all admin functions global for HTML onclick
-window.selectAdminTab = selectAdminTab;
 window.addNews = addNews;
 window.editNews = editNews;
 window.deleteNews = deleteNews;
@@ -929,6 +915,7 @@ window.deleteVideo = deleteVideo;
 window.addMerch = addMerch;
 window.editMerch = editMerch;
 window.deleteMerch = deleteMerch;
+window.selectAdminTab = selectAdminTab;
 </script>
 </body>
 </html>
