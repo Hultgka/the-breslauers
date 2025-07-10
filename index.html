@@ -857,16 +857,42 @@ document.getElementById('footer-contact-form').onsubmit = function(e){
     setTimeout(()=>{document.getElementById('footer-contact-success').style.display="none";},3200);
   }, 500);
 };
-  document.getElementById('admin-cog-float').onclick = function() {
-  document.getElementById('admin-modal').classList.add('show');
-  document.getElementById('admin-login').style.display = adminLoggedIn ? "none" : "block";
-  document.getElementById('admin-panel').style.display = adminLoggedIn ? "block" : "none";
-  if(adminLoggedIn) renderAdminEdits();
-};
-document.getElementById('admin-close-x').onclick = function() {
-  document.getElementById('admin-modal').classList.remove('show');
-};
-document.getElementById('admin-login-btn').onclick = adminLogin;
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var adminCog = document.getElementById('admin-cog-float');
+    var adminModal = document.getElementById('admin-modal');
+    var adminLogin = document.getElementById('admin-login');
+    var adminPanel = document.getElementById('admin-panel');
+    var adminClose = document.getElementById('admin-close-x');
+    var adminLoginBtn = document.getElementById('admin-login-btn');
+    if (!adminCog || !adminModal || !adminLogin || !adminPanel || !adminClose || !adminLoginBtn) {
+      console.error('Admin modal elements not found in DOM');
+      return;
+    }
+
+    adminCog.onclick = function() {
+      adminModal.classList.add('show');
+      adminLogin.style.display = window.adminLoggedIn ? "none" : "block";
+      adminPanel.style.display = window.adminLoggedIn ? "block" : "none";
+      if(window.adminLoggedIn && typeof renderAdminEdits === "function") renderAdminEdits();
+    };
+    adminClose.onclick = function() {
+      adminModal.classList.remove('show');
+    };
+    adminLoginBtn.onclick = function() {
+      var pwd = document.getElementById('admin-password').value.trim();
+      if (pwd === "Karissaisadiva123!") {
+        window.adminLoggedIn = true;
+        adminLogin.style.display = "none";
+        adminPanel.style.display = "block";
+        if (typeof renderAdminEdits === "function") renderAdminEdits();
+        if (typeof renderAllSections === "function") renderAllSections();
+      } else {
+        document.getElementById('admin-login-error').style.display = "block";
+      }
+    };
+  });
 </script>
 </body>
 </html>
