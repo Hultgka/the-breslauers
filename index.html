@@ -630,13 +630,19 @@ if(merchArr.length >= 4){
 
   
  // SHOWS MODAL
+// SHOWS MODAL
 let mslist = document.getElementById('modal-shows-list');
 if(mslist){
   mslist.innerHTML = '';
-  (state.shows.length?state.shows:[
-    {title:"Live at Klub Stary Klasztor",date:"2025-07-12",city:"Wrocław",details:"Come party with us at our summer headline show!"},
-    {title:"Summer Bash Festival",date:"2025-08-05",city:"Kraków",details:"We're on the main stage with The Rockets!"}
-  ]).forEach(show => {
+  // Sort by date ascending (oldest first)
+  (
+    state.shows.length
+      ? state.shows.slice().sort((a, b) => new Date(a.date) - new Date(b.date))
+      : [
+        {title:"Live at Klub Stary Klasztor",date:"2025-07-12",city:"Wrocław",details:"Come party with us at our summer headline show!"},
+        {title:"Summer Bash Festival",date:"2025-08-05",city:"Kraków",details:"We're on the main stage with The Rockets!"}
+      ].sort((a, b) => new Date(a.date) - new Date(b.date))
+  ).forEach(show => {
     mslist.innerHTML += `<li style="padding:0.7em 0;border-bottom:1px solid #2c2c2c;"><b>${show.title || ""}</b><br>
     <span style="color:#ffdbdb">${show.date || ""}</span> @ ${show.city || ""}<br>
     <span style="font-size:0.96em;color:#ccc">${show.details || ""}</span>
