@@ -546,8 +546,7 @@ function renderAllSections() {
   }
 
   // VIDEOS
-  let videosList = document.getElementById('videos-list');
-  videosList.innerHTML = '';
+
  // VIDEOS
 let videosList = document.getElementById('videos-list');
 videosList.innerHTML = '';
@@ -893,6 +892,20 @@ document.getElementById('footer-contact-form').onsubmit = function(e){
       }
     };
   });
+// Make all admin functions global for HTML onclick
+window.selectAdminTab = selectAdminTab;
+window.addNews = addNews;
+window.editNews = editNews;
+window.deleteNews = deleteNews;
+window.addShow = addShow;
+window.editShow = editShow;
+window.deleteShow = deleteShow;
+window.addVideo = addVideo;
+window.editVideo = editVideo;
+window.deleteVideo = deleteVideo;
+window.addMerch = addMerch;
+window.editMerch = editMerch;
+window.deleteMerch = deleteMerch;
 </script>
 </body>
 </html>
