@@ -402,6 +402,14 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+     
+    window.setNextShow = async (id) => {
+  // Set nextShow true for selected, false for all others
+  await Promise.all(state.shows.map(s =>
+    updateDoc(doc(db, "shows", s._id), { nextShow: (s._id === id) })
+  ));
+  await loadAllSections();
+};
 
 // --- STATE ---
 let state = {
@@ -946,13 +954,6 @@ window.selectAdminTab = selectAdminTab;
   const temp = showA.sortOrder;
   await updateDoc(doc(db, "shows", showA._id), { sortOrder: showB.sortOrder });
   await updateDoc(doc(db, "shows", showB._id), { sortOrder: temp });
-  await loadAllSections();
-};
-  window.setNextShow = async (id) => {
-  // Set nextShow true for selected, false for all others
-  await Promise.all(state.shows.map(s =>
-    updateDoc(doc(db, "shows", s._id), { nextShow: (s._id === id) })
-  ));
   await loadAllSections();
 };
 </script>
