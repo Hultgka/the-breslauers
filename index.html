@@ -524,7 +524,7 @@ function renderAllSections() {
 let showsGrid = document.getElementById('shows-content');
 showsGrid.innerHTML = '';
 let showsArr = state.shows;
-let s = showsArr[0];
+let s = showsArr.find(show => show.nextShow) || showsArr[0];
 
 if (s) {
   showsGrid.innerHTML = `
@@ -717,14 +717,15 @@ function renderAdminEdits() {
   }
   if (adminTab === "shows") {
     c.innerHTML = `<button onclick="addShow()" style="margin-bottom:1em;">+ Add Show</button>`;
-   state.shows
+state.shows
   .slice()
   .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
   .forEach((s, idx, arr) => {
     c.innerHTML += `<div style="margin-bottom:0.7em;">
-      <b>${s.title}</b> (${s.date})<br>
+      <b>${s.title}</b> (${s.date}) ${s.nextShow ? '<span style="color:lime;font-weight:bold;">[Next Show]</span>' : ''}<br>
       <button onclick="editShow('${s._id}')">Edit</button>
       <button onclick="deleteShow('${s._id}')">Delete</button>
+      <button onclick="setNextShow('${s._id}')">Set as Next Show</button>
       ${idx > 0 ? `<button onclick="moveShow('${s._id}', -1)">↑</button>` : ""}
       ${idx < arr.length - 1 ? `<button onclick="moveShow('${s._id}', 1)">↓</button>` : ""}
     </div>`;
@@ -945,6 +946,13 @@ window.selectAdminTab = selectAdminTab;
   const temp = showA.sortOrder;
   await updateDoc(doc(db, "shows", showA._id), { sortOrder: showB.sortOrder });
   await updateDoc(doc(db, "shows", showB._id), { sortOrder: temp });
+  await loadAllSections();
+};
+  window.setNextShow = async (id) => {
+  // Set nextShow true for selected, false for all others
+  await Promise.all(state.shows.map(s =>
+    updateDoc(doc(db, "shows", s._id), { nextShow: (s._id === id) })
+  ));
   await loadAllSections();
 };
 </script>
