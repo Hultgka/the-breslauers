@@ -717,13 +717,18 @@ function renderAdminEdits() {
   }
   if (adminTab === "shows") {
     c.innerHTML = `<button onclick="addShow()" style="margin-bottom:1em;">+ Add Show</button>`;
-    state.shows.forEach(s => {
-      c.innerHTML += `<div style="margin-bottom:0.7em;">
-        <b>${s.title}</b> (${s.date})<br>
-        <button onclick="editShow('${s._id}')">Edit</button>
-        <button onclick="deleteShow('${s._id}')">Delete</button>
-      </div>`;
-    });
+   state.shows
+  .slice()
+  .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+  .forEach((s, idx, arr) => {
+    c.innerHTML += `<div style="margin-bottom:0.7em;">
+      <b>${s.title}</b> (${s.date})<br>
+      <button onclick="editShow('${s._id}')">Edit</button>
+      <button onclick="deleteShow('${s._id}')">Delete</button>
+      ${idx > 0 ? `<button onclick="moveShow('${s._id}', -1)">↑</button>` : ""}
+      ${idx < arr.length - 1 ? `<button onclick="moveShow('${s._id}', 1)">↓</button>` : ""}
+    </div>`;
+  });
   }
   if (adminTab === "videos") {
     c.innerHTML = `<button onclick="addVideo()" style="margin-bottom:1em;">+ Add Video</button>`;
@@ -927,6 +932,21 @@ window.editMerch = (id) => { let m = state.merch.find(x => x._id === id); openEd
 window.deleteMerch = async (id) => { if (!confirm("Are you sure?")) return; await deleteDoc(doc(db, "merch", id)); await loadAllSections(); alert("Merch deleted!"); };
 
 window.selectAdminTab = selectAdminTab;
+  window.moveShow = async (id, direction) => {
+  // Always work on sorted array
+  const sorted = state.shows.slice().sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+  const idx = sorted.findIndex(s => s._id === id);
+  if (idx < 0) return;
+  const swapIdx = idx + direction;
+  if (swapIdx < 0 || swapIdx >= sorted.length) return;
+  // Swap sortOrder values
+  const showA = sorted[idx];
+  const showB = sorted[swapIdx];
+  const temp = showA.sortOrder;
+  await updateDoc(doc(db, "shows", showA._id), { sortOrder: showB.sortOrder });
+  await updateDoc(doc(db, "shows", showB._id), { sortOrder: temp });
+  await loadAllSections();
+};
 </script>
 </body>
 </html>
