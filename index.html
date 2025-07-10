@@ -521,7 +521,7 @@ function renderAllSections() {
   }
 
   // SHOWS
- let showsGrid = document.getElementById('shows-content');
+let showsGrid = document.getElementById('shows-content');
 showsGrid.innerHTML = '';
 let showsArr = state.shows;
 let s = showsArr[0];
@@ -545,6 +545,17 @@ if (s) {
     </div>
   `;
   document.getElementById('next-show-details').textContent = s.details || "";
+} else {
+  // No shows; show "add" button for admin or a message for public
+  if (adminLoggedIn) {
+    showsGrid.innerHTML = `<div style="width:100%;margin-top:2em;text-align:right;">
+      <button class="news-admin-btn" onclick="addShow()">+ Add Show</button>
+    </div>`;
+  } else {
+    showsGrid.innerHTML = `<div style="color:#fff;">No upcoming shows. Check back soon!</div>`;
+  }
+  document.getElementById('next-show-details').textContent = "";
+}
 } else {
   // No shows; show "add" button for admin or a message for public
   if (adminLoggedIn) {
@@ -918,7 +929,6 @@ window.deleteVideo = deleteVideo;
 window.addMerch = addMerch;
 window.editMerch = editMerch;
 window.deleteMerch = deleteMerch;
-  window.selectAdminTab = selectAdminTab;
 </script>
 </body>
 </html>
